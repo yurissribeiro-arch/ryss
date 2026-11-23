@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CartButton } from "./CartButton";
 import { Logo } from "./Logo";
 import { site } from "@/config/site";
 
@@ -10,8 +11,9 @@ export function Header() {
         <Link href="/" aria-label={`${site.name}, página inicial`}>
           <Logo priority />
         </Link>
-        {/* Ícone do carrinho entra aqui na etapa do carrinho. */}
-        <div className="justify-self-end" />
+        <div className="justify-self-end">
+          <CartButton />
+        </div>
       </div>
     </header>
   );
