@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Identidade RYSS COMPANY: preto, branco e cinza. */
+@theme {
+  --color-ink: #0a0a0a;
+  --color-paper: #ffffff;
+  --color-mist: #f3f3f3; /* fundo padrão das fotografias */
+  --color-line: #e6e6e6;
+  --color-muted: #6b6b6b;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
