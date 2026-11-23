@@ -42,9 +42,6 @@ export function ProductCard({ product, priority }: Props) {
     </>
   );
 
-  // Produtos de exemplo não têm página; não geram link sem destino.
-  if (product.isDemo) return <div>{content}</div>;
-
   return (
     <Link href={`/produto/${product.slug}`} className="group block">
       {content}
