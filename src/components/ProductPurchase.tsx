@@ -65,7 +65,7 @@ export function ProductPurchase({ product }: Props) {
   }
 
   function handleBuyNow() {
-    if (add()) router.push("/carrinho");
+    if (add()) router.push("/checkout");
   }
 
   if (product.variants.length === 0 || soldOut) {

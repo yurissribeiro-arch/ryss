@@ -1,4 +1,6 @@
 import { cacheLife } from "next/cache";
+import Link from "next/link";
+import { LEGAL_LINKS } from "./LegalPage";
 import { Logo } from "./Logo";
 import { site } from "@/config/site";
 
@@ -9,6 +11,9 @@ export async function Footer() {
   const email: string = site.contact.email;
   const whatsapp: string = site.contact.whatsapp;
   const instagram: string = site.contact.instagram;
+  const legalName: string = site.legal.companyName;
+  const cnpj: string = site.legal.cnpj;
+  const address: string = site.legal.address;
 
   const contacts: { label: string; href: string }[] = [];
   if (email) contacts.push({ label: email, href: `mailto:${email}` });
@@ -22,8 +27,20 @@ export async function Footer() {
 
   return (
     <footer className="mt-auto bg-ink text-paper">
-      <div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-4 py-12 md:flex-row md:items-start md:justify-between md:px-8">
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-4 py-12 md:flex-row md:items-start md:gap-16 md:px-8">
         <Logo variant="white" />
+
+        <nav aria-label="Informações" className="md:ml-auto">
+          <ul className="flex flex-col gap-2 text-sm text-paper/70">
+            {LEGAL_LINKS.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="transition-colors hover:text-paper">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         {contacts.length > 0 && (
           <ul className="flex flex-col gap-2 text-sm text-paper/70">
@@ -43,9 +60,14 @@ export async function Footer() {
         )}
       </div>
       <div className="border-t border-paper/10">
-        <p className="mx-auto max-w-[1440px] px-4 py-5 text-xs text-paper/50 md:px-8">
-          © {year} {site.name}
-        </p>
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-1 px-4 py-5 text-xs text-paper/50 md:px-8">
+          <p>
+            © {year} {legalName || site.name}
+          </p>
+          {(cnpj || address) && (
+            <p>{[cnpj && `CNPJ ${cnpj}`, address].filter(Boolean).join(" · ")}</p>
+          )}
+        </div>
       </div>
     </footer>
   );

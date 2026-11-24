@@ -1,7 +1,12 @@
 import Link from "next/link";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 
 export default function NotFound() {
   return (
+    <>
+      <Header />
+      <main className="flex-1">
     <div className="mx-auto max-w-[1440px] px-4 py-24 text-center md:px-8">
       <h1 className="text-sm font-semibold uppercase tracking-[0.28em]">
         Página não encontrada
@@ -16,5 +21,8 @@ export default function NotFound() {
         Ver produtos
       </Link>
     </div>
+      </main>
+      <Footer />
+    </>
   );
 }

@@ -27,4 +27,23 @@ export const site = {
     whatsapp: "", // somente números com DDI, ex.: "5511999999999"
     instagram: "", // usuário sem @, ex.: "rysscompany"
   },
+
+  /**
+   * Identificação exigida em lojas online (Decreto 7.962/2013, art. 2º).
+   * Aparece no rodapé e nas páginas legais quando preenchida.
+   */
+  legal: {
+    companyName: "", // razão social, ex.: "RYSS COMPANY LTDA"
+    cnpj: "", // ex.: "00.000.000/0001-00"
+    address: "", // endereço completo, ex.: "Rua X, 100, Bairro, Cidade/UF, CEP 00000-000"
+  },
+
+  /**
+   * Regras comerciais da loja. Preencha somente o que a loja realmente oferece;
+   * campos vazios não aparecem no site.
+   */
+  policies: {
+    /** Troca por tamanho ou gosto (não obrigatória por lei), ex.: "Aceitamos troca de tamanho em até 30 dias…" */
+    exchange: "",
+  },
 } as const;

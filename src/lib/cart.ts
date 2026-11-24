@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { z } from "zod";
+import { MAX_QTY_PER_ITEM } from "./cart-limits";
 
 /**
  * Carrinho salvo no navegador (localStorage), sincronizado entre abas.
@@ -10,7 +11,7 @@ import { z } from "zod";
  */
 
 const STORAGE_KEY = "ryss:cart:v1";
-export const MAX_QTY_PER_ITEM = 10;
+export { MAX_QTY_PER_ITEM };
 
 const cartItemSchema = z.object({
   variantId: z.string().min(1),
@@ -148,6 +149,48 @@ export function setQuantity(variantId: string, quantity: number) {
 
 export function removeFromCart(variantId: string) {
   write(read().filter((i) => i.variantId !== variantId));
+}
+
+/**
+ * Atualiza preço e estoque com os dados do servidor. Remove itens que não
+ * existem mais ou esgotaram e reduz quantidades acima do disponível.
+ * Devolve true se algo mudou além do preço.
+ */
+export function applyQuotes(
+  quotes: { variantId: string; priceCents: number; stock: number }[],
+): { changed: boolean; priceChanged: boolean } {
+  const byId = new Map(quotes.map((q) => [q.variantId, q]));
+  let changed = false;
+  let priceChanged = false;
+  const next = read().flatMap((item) => {
+    const q = byId.get(item.variantId);
+    if (!q || q.stock <= 0) {
+      changed = true;
+      return [];
+    }
+    const updated = { ...item, priceCents: q.priceCents, maxQuantity: q.stock };
+    const limit = limitFor(updated);
+    if (updated.quantity > limit) {
+      updated.quantity = limit;
+      changed = true;
+    }
+    if (q.priceCents !== item.priceCents) priceChanged = true;
+    return [updated];
+  });
+  write(next);
+  return { changed, priceChanged };
+}
+
+/** Ajusta um item ao estoque informado pelo servidor (0 remove). */
+export function limitToStock(variantId: string, available: number) {
+  write(
+    read().flatMap((i) => {
+      if (i.variantId !== variantId) return [i];
+      if (available <= 0) return [];
+      const updated = { ...i, maxQuantity: available };
+      return [{ ...updated, quantity: Math.min(i.quantity, limitFor(updated)) }];
+    }),
+  );
 }
 
 export function clearCart() {
